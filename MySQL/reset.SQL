@@ -3,20 +3,25 @@
 -- Purpose: Wipe all tables to allow for a clean schema rerun.
 -- ##########################################
 
--- Disable constraints to allow dropping tables in any order
+-- Ensure we are targeting the correct database
+USE `zw79_EMW_Database`;
+
+-- Disable constraints to allow a "nuclear" drop
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Drop Allocation/Join tables first
+-- Drop Allocation/Join tables (Children)
 DROP TABLE IF EXISTS `eventTypeAllocation`;
 DROP TABLE IF EXISTS `clientServiceAllocation`;
 DROP TABLE IF EXISTS `vendorServiceAllocation`;
 
--- Drop Entity tables
+-- Drop Dependent Entity tables (Children)
+DROP TABLE IF EXISTS `message`; 
+DROP TABLE IF EXISTS `chat`;
+
+-- Drop Base Entity tables (Parents)
 DROP TABLE IF EXISTS `eventType`;
 DROP TABLE IF EXISTS `blog`;
 DROP TABLE IF EXISTS `admin`;
-DROP TABLE IF EXISTS `chat`;
-DROP TABLE IF EXISTS `message`;
 DROP TABLE IF EXISTS `service`;
 DROP TABLE IF EXISTS `vendor`;
 DROP TABLE IF EXISTS `client`;

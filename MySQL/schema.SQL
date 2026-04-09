@@ -1,11 +1,15 @@
 -- Target the specific database provided by cPanel
 USE `zw79_EMW_Database`;
 
--- Zach's Section
+-- ##########################################
+-- SECTION 1: TABLE DEFINITIONS
+-- ##########################################
+
+-- Zach's Tables
 CREATE TABLE IF NOT EXISTS `address` (
     `addressID` BIGINT NOT NULL AUTO_INCREMENT,
     `streetName` VARCHAR(60) NOT NULL,
-    `houseNumber` INT NOT NULL, 
+    `houseNumber` VARCHAR(10) NOT NULL, -- Changed from INT for 4B/Flat 2 compatibility
     `city` VARCHAR(60) NOT NULL,
     `county` VARCHAR(60) NOT NULL,
     `postcode` VARCHAR(8) NOT NULL,
@@ -18,12 +22,11 @@ CREATE TABLE IF NOT EXISTS `client` (
     `firstName` VARCHAR(50) NOT NULL,
     `lastName` VARCHAR(50) NOT NULL,
     `username` VARCHAR(50) NOT NULL,
-    `password` VARCHAR(50) NOT NULL, -- password email and phone number constraints will be validated on input level
+    `password` VARCHAR(255) NOT NULL, -- password email and phone number constraints will be validated on input level and hashed
     `email` VARCHAR(50) NOT NULL,
     `phoneNumber` VARCHAR(11) NOT NULL,
     `isBanned` BOOLEAN NOT NULL DEFAULT FALSE,
-    PRIMARY KEY (`clientID`),
-    CONSTRAINT `fk_client_address` FOREIGN KEY (`addressID`) REFERENCES `address` (`addressID`)
+    PRIMARY KEY (`clientID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `vendor` (
@@ -31,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `vendor` (
     `firstName` VARCHAR(50) NOT NULL,
     `lastName` VARCHAR(50) NOT NULL,
     `username` VARCHAR(50) NOT NULL,
-    `password` VARCHAR(50) NOT NULL, -- password email and phone number constraints will be validated on input level
+    `password` VARCHAR(255) NOT NULL, -- password email and phone number constraints will be validated on input level and hashed
     `email` VARCHAR(50) NOT NULL,
     `phoneNumber` VARCHAR(11) NOT NULL,
     `vendorOrginisationRole` VARCHAR(25) NOT NULL, 
@@ -51,47 +54,79 @@ CREATE TABLE IF NOT EXISTS `vendorServiceAllocation` (
     `vendorServiceID` BIGINT NOT NULL AUTO_INCREMENT,
     `vendorID` BIGINT NOT NULL,
     `serviceID` BIGINT NOT NULL,
-    PRIMARY KEY (`vendorServiceID`),
-    CONSTRAINT `fk_vsa_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`),
-    CONSTRAINT `fk_vsa_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`)
+    PRIMARY KEY (`vendorServiceID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `clientServiceAllocation` (
     `clientServiceID` BIGINT NOT NULL AUTO_INCREMENT,
     `clientID` BIGINT NOT NULL,
     `serviceID` BIGINT NOT NULL,
-    PRIMARY KEY (`clientServiceID`),
-    CONSTRAINT `fk_csa_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`),
-    CONSTRAINT `fk_csa_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`)
+    PRIMARY KEY (`clientServiceID`)
 ) ENGINE=InnoDB;
 
--- Tom's Section
-CREATE TABLE IF NOT EXISTS `message` (
-    `messageID` BIGINT NOT NULL AUTO_INCREMENT,
-    PRIMARY KEY (`messageID`)
+-- Tom's Tables
+CREATE TABLE IF NOT EXISTS `admin` (
+    `adminID` BIGINT NOT NULL AUTO_INCREMENT,
+    `firstName` VARCHAR(50) NOT NULL,
+    `lastName` VARCHAR(50) NOT NULL,
+    `username` VARCHAR(50) NOT NULL UNIQUE,
+    `password` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(320) NOT NULL UNIQUE,
+    `phoneNumber` VARCHAR(12) NOT NULL,
+    PRIMARY KEY (`adminID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `chat` (
     `chatID` BIGINT NOT NULL AUTO_INCREMENT,
+    `clientID` BIGINT NOT NULL,
+    `vendorID` BIGINT NOT NULL,
     PRIMARY KEY (`chatID`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `admin` (
-    `adminID` BIGINT NOT NULL AUTO_INCREMENT,
-    PRIMARY KEY (`adminID`)
+CREATE TABLE IF NOT EXISTS `message` (
+    `messageID` BIGINT NOT NULL AUTO_INCREMENT,
+    `chatID` BIGINT NOT NULL,
+    `senderID` BIGINT NOT NULL,
+    `senderType` ENUM('client', 'vendor') NOT NULL,
+    `messageContent` TEXT NOT NULL,
+    PRIMARY KEY (`messageID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `blog` (
     `blogID` BIGINT NOT NULL AUTO_INCREMENT,
+    `posterID` BIGINT NOT NULL,
+    `posterType` ENUM('admin') NOT NULL DEFAULT 'admin',
+    `blogContent` MEDIUMBLOB NOT NULL,
     PRIMARY KEY (`blogID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `eventType` (
     `eventTypeID` BIGINT NOT NULL AUTO_INCREMENT,
+    `eventTypeName` VARCHAR(25) NOT NULL,
     PRIMARY KEY (`eventTypeID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `eventTypeAllocation` (
     `eventTypeAllocationID` BIGINT NOT NULL AUTO_INCREMENT,
+    `serviceID` BIGINT NOT NULL,
+    `eventTypeID` BIGINT NOT NULL,
     PRIMARY KEY (`eventTypeAllocationID`)
 ) ENGINE=InnoDB;
+
+-- ##########################################
+-- SECTION 2: RELATIONSHIPS (FOREIGN KEYS)
+-- ##########################################
+
+-- Zach's Relationships
+ALTER TABLE `client` ADD CONSTRAINT `fk_client_address` FOREIGN KEY (`addressID`) REFERENCES `address` (`addressID`);
+ALTER TABLE `vendorServiceAllocation` ADD CONSTRAINT `fk_vsa_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`);
+ALTER TABLE `vendorServiceAllocation` ADD CONSTRAINT `fk_vsa_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
+ALTER TABLE `clientServiceAllocation` ADD CONSTRAINT `fk_csa_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);
+ALTER TABLE `clientServiceAllocation` ADD CONSTRAINT `fk_csa_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
+
+-- Tom's Relationships
+ALTER TABLE `chat` ADD CONSTRAINT `fk_chat_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);
+ALTER TABLE `chat` ADD CONSTRAINT `fk_chat_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`);
+ALTER TABLE `message` ADD CONSTRAINT `fk_msg_chat` FOREIGN KEY (`chatID`) REFERENCES `chat` (`chatID`);
+ALTER TABLE `eventTypeAllocation` ADD CONSTRAINT `fk_eta_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
+ALTER TABLE `eventTypeAllocation` ADD CONSTRAINT `fk_eta_type` FOREIGN KEY (`eventTypeID`) REFERENCES `eventType` (`eventTypeID`);
