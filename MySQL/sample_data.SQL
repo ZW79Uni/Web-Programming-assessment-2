@@ -72,14 +72,14 @@ INSERT INTO `review` (`clientID`, `vendorID`, `rating`, `comment`) VALUES
 (1, 2, 5, 'Great service and smooth setup. Highly recommend.'),
 (1, 1, 4, 'Helpful team and good communication.');
 
-INSERT INTO `booking` (`clientID`, `serviceID`, `eventDate`, `status`) VALUES
-(1, 2, '2026-06-12', 'confirmed'),
-(1, 3, '2026-06-12', 'pending');
+INSERT INTO `booking` (`clientID`, `vendorID`, `serviceID`, `eventDate`, `status`) VALUES
+(1, 2, 2, '2026-06-12', 'confirmed'),
+(1, 1, 3, '2026-06-12', 'pending');
 
-INSERT INTO `auditLog` (`adminID`, `actionType`, `targetID`, `reason`) VALUES
-(1, 'verify_vendor', 1, 'Company registration documents validated.'),
-(1, 'verify_vendor', 2, 'Insurance and portfolio checks completed.'),
-(1, 'update_service', 2, 'Updated marquee availability and pricing checks.');
+INSERT INTO `auditLog` (`adminID`, `actionType`, `targetType`, `targetID`, `reason`) VALUES
+(1, 'verify_vendor', 'vendor', 1, 'Company registration documents validated.'),
+(1, 'verify_vendor', 'vendor', 2, 'Insurance and portfolio checks completed.'),
+(1, 'update_service', 'service', 2, 'Updated marquee availability and pricing checks.');
 
 INSERT INTO `chat` (`clientID`, `vendorID`) VALUES
 (1, 2);
