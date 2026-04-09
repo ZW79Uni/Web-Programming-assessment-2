@@ -131,6 +131,7 @@ CREATE TABLE IF NOT EXISTS `review` (
 CREATE TABLE IF NOT EXISTS `booking` (
     `bookingID` BIGINT NOT NULL AUTO_INCREMENT,
     `clientID` BIGINT NOT NULL,
+    `vendorID` BIGINT NOT NULL,
     `serviceID` BIGINT NOT NULL,
     `eventDate` DATE NOT NULL,
     `status` ENUM('pending', 'confirmed', 'cancelled', 'completed') DEFAULT 'pending',
@@ -141,6 +142,7 @@ CREATE TABLE IF NOT EXISTS `auditLog` (
     `logID` BIGINT NOT NULL AUTO_INCREMENT,
     `adminID` BIGINT NOT NULL,
     `actionType` ENUM('verify_vendor', 'ban_client', 'delete_message', 'update_service') NOT NULL,
+    `targetType` ENUM('client', 'vendor', 'service', 'message', 'blog') NOT NULL,
     `targetID` BIGINT NOT NULL,
     `actionDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `reason` TEXT,
@@ -202,6 +204,7 @@ ALTER TABLE `eventTypeAllocation` ADD CONSTRAINT `fk_eta_type` FOREIGN KEY (`eve
 ALTER TABLE `review` ADD CONSTRAINT `fk_review_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);
 ALTER TABLE `review` ADD CONSTRAINT `fk_review_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`);
 ALTER TABLE `booking` ADD CONSTRAINT `fk_booking_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);
+ALTER TABLE `booking` ADD CONSTRAINT `fk_booking_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`);
 ALTER TABLE `booking` ADD CONSTRAINT `fk_booking_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
 ALTER TABLE `vendor` ADD CONSTRAINT `fk_vendor_verified_by` FOREIGN KEY (`verifiedBy`) REFERENCES `admin` (`adminID`);
 ALTER TABLE `client` ADD CONSTRAINT `fk_client_banned_by` FOREIGN KEY (`bannedBy`) REFERENCES `admin` (`adminID`);
@@ -213,23 +216,23 @@ CREATE TRIGGER `trg_message_validate_sender_insert`
 BEFORE INSERT ON `message`
 FOR EACH ROW
 BEGIN
+    DECLARE v_client_id BIGINT;
+    DECLARE v_vendor_id BIGINT;
+
+    SELECT `clientID`, `vendorID`
+    INTO v_client_id, v_vendor_id
+    FROM `chat`
+    WHERE `chatID` = NEW.chatID;
+
     IF NEW.senderType = 'client' THEN
-        IF NOT EXISTS (
-            SELECT 1
-            FROM `client`
-            WHERE `clientID` = NEW.senderID
-        ) THEN
+        IF NEW.senderID <> v_client_id THEN
             SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'message.senderID must reference client when senderType = client';
+                SET MESSAGE_TEXT = 'Client is not a participant in this chat.';
         END IF;
     ELSEIF NEW.senderType = 'vendor' THEN
-        IF NOT EXISTS (
-            SELECT 1
-            FROM `vendor`
-            WHERE `vendorID` = NEW.senderID
-        ) THEN
+        IF NEW.senderID <> v_vendor_id THEN
             SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'message.senderID must reference vendor when senderType = vendor';
+                SET MESSAGE_TEXT = 'Vendor is not a participant in this chat.';
         END IF;
     ELSEIF NEW.senderType = 'admin' THEN
         IF NOT EXISTS (
@@ -238,7 +241,7 @@ BEGIN
             WHERE `adminID` = NEW.senderID
         ) THEN
             SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'message.senderID must reference admin when senderType = admin';
+                SET MESSAGE_TEXT = 'Admin senderID does not exist.';
         END IF;
     END IF;
 END$$
@@ -247,23 +250,23 @@ CREATE TRIGGER `trg_message_validate_sender_update`
 BEFORE UPDATE ON `message`
 FOR EACH ROW
 BEGIN
+    DECLARE v_client_id BIGINT;
+    DECLARE v_vendor_id BIGINT;
+
+    SELECT `clientID`, `vendorID`
+    INTO v_client_id, v_vendor_id
+    FROM `chat`
+    WHERE `chatID` = NEW.chatID;
+
     IF NEW.senderType = 'client' THEN
-        IF NOT EXISTS (
-            SELECT 1
-            FROM `client`
-            WHERE `clientID` = NEW.senderID
-        ) THEN
+        IF NEW.senderID <> v_client_id THEN
             SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'message.senderID must reference client when senderType = client';
+                SET MESSAGE_TEXT = 'Client is not a participant in this chat.';
         END IF;
     ELSEIF NEW.senderType = 'vendor' THEN
-        IF NOT EXISTS (
-            SELECT 1
-            FROM `vendor`
-            WHERE `vendorID` = NEW.senderID
-        ) THEN
+        IF NEW.senderID <> v_vendor_id THEN
             SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'message.senderID must reference vendor when senderType = vendor';
+                SET MESSAGE_TEXT = 'Vendor is not a participant in this chat.';
         END IF;
     ELSEIF NEW.senderType = 'admin' THEN
         IF NOT EXISTS (
@@ -272,7 +275,7 @@ BEGIN
             WHERE `adminID` = NEW.senderID
         ) THEN
             SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'message.senderID must reference admin when senderType = admin';
+                SET MESSAGE_TEXT = 'Admin senderID does not exist.';
         END IF;
     END IF;
 END$$
