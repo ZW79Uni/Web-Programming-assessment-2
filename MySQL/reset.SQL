@@ -9,14 +9,18 @@ USE `zw79_EMW_Database`;
 -- Disable constraints to allow a "nuclear" drop
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Drop Allocation/Join tables (Children)
+-- Drop Child/Dependent tables first (reverse dependency order)
+DROP TABLE IF EXISTS `message`;
+DROP TABLE IF EXISTS `chat`;
+DROP TABLE IF EXISTS `clientFavorites`;
+DROP TABLE IF EXISTS `booking`;
+DROP TABLE IF EXISTS `review`;
+DROP TABLE IF EXISTS `auditLog`;
+
+-- Drop Allocation/Join tables
 DROP TABLE IF EXISTS `eventTypeAllocation`;
 DROP TABLE IF EXISTS `clientServiceAllocation`;
 DROP TABLE IF EXISTS `vendorServiceAllocation`;
-
--- Drop Dependent Entity tables (Children)
-DROP TABLE IF EXISTS `message`; 
-DROP TABLE IF EXISTS `chat`;
 
 -- Drop Base Entity tables (Parents)
 DROP TABLE IF EXISTS `eventType`;

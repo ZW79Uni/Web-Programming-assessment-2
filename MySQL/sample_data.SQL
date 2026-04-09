@@ -20,10 +20,10 @@ INSERT INTO `admin` (`firstName`, `lastName`, `username`, `password`, `email`, `
 -- ##########################################
 -- SECTION 3: VENDOR SEEDING (Professional Pete & Ali)
 -- ##########################################
-INSERT INTO `vendor` (`firstName`, `lastName`, `username`, `password`, `email`, `phoneNumber`, `vendorOrginisationRole`, `vendorOrginisationName`, `isVerified`, `automationScore`) VALUES
-('Ali', 'EMW', 'EMW_official', '$2y$10$VendorHash1', 'help@eventsmeetsworld.co.uk', '07714165861', 'Director', 'Events Meets World Ltd', TRUE, 100),
-('Pete', 'Professional', 'ProPete', '$2y$10$VendorHash2', 'pete@majesticmarquees.co.uk', '07123456789', 'Owner', 'Majestic Marquees Kent', TRUE, 85),
-('Sarah', 'Chef', 'OwenCater', '$2y$10$VendorHash3', 'info@owenbrothers.co.uk', '02086752905', 'Manager', 'Owen Brothers Catering', FALSE, 45);
+INSERT INTO `vendor` (`firstName`, `lastName`, `username`, `password`, `email`, `phoneNumber`, `vendorOrginisationRole`, `vendorOrginisationName`, `isVerified`, `automationScore`, `verifiedBy`, `verifiedAt`) VALUES
+('Ali', 'EMW', 'EMW_official', '$2y$10$VendorHash1', 'help@eventsmeetsworld.co.uk', '07714165861', 'Director', 'Events Meets World Ltd', TRUE, 100, 1, '2026-04-01 09:30:00'),
+('Pete', 'Professional', 'ProPete', '$2y$10$VendorHash2', 'pete@majesticmarquees.co.uk', '07123456789', 'Owner', 'Majestic Marquees Kent', TRUE, 85, 1, '2026-04-02 10:00:00'),
+('Sarah', 'Chef', 'OwenCater', '$2y$10$VendorHash3', 'info@owenbrothers.co.uk', '02086752905', 'Manager', 'Owen Brothers Catering', FALSE, 45, NULL, NULL);
 
 -- ##########################################
 -- SECTION 4: CLIENT SEEDING (Busy Becky)
@@ -68,8 +68,22 @@ INSERT INTO `eventTypeAllocation` (`serviceID`, `eventTypeID`) VALUES
 INSERT INTO `clientFavorites` (`clientID`, `vendorID`) VALUES
 (1, 2); -- Becky saved Majestic Marquees
 
+INSERT INTO `review` (`clientID`, `vendorID`, `rating`, `comment`) VALUES
+(1, 2, 5, 'Great service and smooth setup. Highly recommend.'),
+(1, 1, 4, 'Helpful team and good communication.');
+
+INSERT INTO `booking` (`clientID`, `serviceID`, `eventDate`, `status`) VALUES
+(1, 2, '2026-06-12', 'confirmed'),
+(1, 3, '2026-06-12', 'pending');
+
+INSERT INTO `auditLog` (`adminID`, `actionType`, `targetID`, `reason`) VALUES
+(1, 'verify_vendor', 1, 'Company registration documents validated.'),
+(1, 'verify_vendor', 2, 'Insurance and portfolio checks completed.'),
+(1, 'update_service', 2, 'Updated marquee availability and pricing checks.');
+
 INSERT INTO `chat` (`clientID`, `vendorID`) VALUES
 (1, 2);
 
 INSERT INTO `message` (`chatID`, `senderID`, `senderType`, `messageContent`) VALUES
-(1, 1, 'client', 'Hi Pete, do you have the 4X8M Marquee available for June 12th?');
+(1, 1, 'client', 'Hi Pete, do you have the 4X8M Marquee available for June 12th?'),
+(1, 1, 'admin', 'System Sam here. Let me know if you need support with booking confirmation.');

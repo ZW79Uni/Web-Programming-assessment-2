@@ -26,6 +26,9 @@ CREATE TABLE IF NOT EXISTS `client` (
     `email` VARCHAR(50) NOT NULL,
     `phoneNumber` VARCHAR(11) NOT NULL,
     `isBanned` BOOLEAN NOT NULL DEFAULT FALSE,
+    `bannedBy` BIGINT NULL,
+    `bannedAt` TIMESTAMP NULL DEFAULT NULL,
+    `banReason` TEXT NULL,
     PRIMARY KEY (`clientID`)
 ) ENGINE=InnoDB;
 
@@ -39,6 +42,8 @@ CREATE TABLE IF NOT EXISTS `vendor` (
     `phoneNumber` VARCHAR(11) NOT NULL,
     `vendorOrginisationRole` VARCHAR(25) NOT NULL, 
     `vendorOrginisationName` VARCHAR(50) NOT NULL,
+    `verifiedBy` BIGINT NULL,
+    `verifiedAt` TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY (`vendorID`)
 ) ENGINE=InnoDB;
 
@@ -87,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `message` (
     `messageID` BIGINT NOT NULL AUTO_INCREMENT,
     `chatID` BIGINT NOT NULL,
     `senderID` BIGINT NOT NULL,
-    `senderType` ENUM('client', 'vendor') NOT NULL,
+    `senderType` ENUM('client', 'vendor', 'admin') NOT NULL,
     `messageContent` TEXT NOT NULL,
     PRIMARY KEY (`messageID`)
 ) ENGINE=InnoDB;
@@ -113,6 +118,35 @@ CREATE TABLE IF NOT EXISTS `eventTypeAllocation` (
     PRIMARY KEY (`eventTypeAllocationID`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `review` (
+    `reviewID` BIGINT NOT NULL AUTO_INCREMENT,
+    `clientID` BIGINT NOT NULL,
+    `vendorID` BIGINT NOT NULL,
+    `rating` TINYINT NOT NULL CHECK (`rating` BETWEEN 1 AND 5),
+    `comment` TEXT,
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`reviewID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `booking` (
+    `bookingID` BIGINT NOT NULL AUTO_INCREMENT,
+    `clientID` BIGINT NOT NULL,
+    `serviceID` BIGINT NOT NULL,
+    `eventDate` DATE NOT NULL,
+    `status` ENUM('pending', 'confirmed', 'cancelled', 'completed') DEFAULT 'pending',
+    PRIMARY KEY (`bookingID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `auditLog` (
+    `logID` BIGINT NOT NULL AUTO_INCREMENT,
+    `adminID` BIGINT NOT NULL,
+    `actionType` ENUM('verify_vendor', 'ban_client', 'delete_message', 'update_service') NOT NULL,
+    `targetID` BIGINT NOT NULL,
+    `actionDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `reason` TEXT,
+    PRIMARY KEY (`logID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- ##########################################
 -- SECTION 2: Updates for Scaling and Functionality
 -- ##########################################
@@ -121,6 +155,14 @@ CREATE TABLE IF NOT EXISTS `eventTypeAllocation` (
 ALTER TABLE `vendor` 
 ADD COLUMN `isVerified` BOOLEAN NOT NULL DEFAULT FALSE,
 ADD COLUMN `automationScore` INT DEFAULT 0;
+
+ALTER TABLE `client`
+ADD CONSTRAINT `uq_client_username` UNIQUE (`username`),
+ADD CONSTRAINT `uq_client_email` UNIQUE (`email`);
+
+ALTER TABLE `vendor`
+ADD CONSTRAINT `uq_vendor_username` UNIQUE (`username`),
+ADD CONSTRAINT `uq_vendor_email` UNIQUE (`email`);
 
 -- Add availability for matchmaking logic
 ALTER TABLE `service` 
@@ -146,10 +188,93 @@ ALTER TABLE `vendorServiceAllocation` ADD CONSTRAINT `fk_vsa_vendor` FOREIGN KEY
 ALTER TABLE `vendorServiceAllocation` ADD CONSTRAINT `fk_vsa_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
 ALTER TABLE `clientServiceAllocation` ADD CONSTRAINT `fk_csa_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);
 ALTER TABLE `clientServiceAllocation` ADD CONSTRAINT `fk_csa_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
+ALTER TABLE `vendorServiceAllocation` ADD CONSTRAINT `uq_vendor_service` UNIQUE (`vendorID`, `serviceID`);
+ALTER TABLE `clientServiceAllocation` ADD CONSTRAINT `uq_client_service` UNIQUE (`clientID`, `serviceID`);
 
 -- Tom's Relationships
 ALTER TABLE `chat` ADD CONSTRAINT `fk_chat_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);
 ALTER TABLE `chat` ADD CONSTRAINT `fk_chat_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`);
+ALTER TABLE `chat` ADD CONSTRAINT `uq_chat_client_vendor` UNIQUE (`clientID`, `vendorID`);
 ALTER TABLE `message` ADD CONSTRAINT `fk_msg_chat` FOREIGN KEY (`chatID`) REFERENCES `chat` (`chatID`);
+ALTER TABLE `blog` ADD CONSTRAINT `fk_blog_admin` FOREIGN KEY (`posterID`) REFERENCES `admin` (`adminID`);
 ALTER TABLE `eventTypeAllocation` ADD CONSTRAINT `fk_eta_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
 ALTER TABLE `eventTypeAllocation` ADD CONSTRAINT `fk_eta_type` FOREIGN KEY (`eventTypeID`) REFERENCES `eventType` (`eventTypeID`);
+ALTER TABLE `review` ADD CONSTRAINT `fk_review_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);
+ALTER TABLE `review` ADD CONSTRAINT `fk_review_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`);
+ALTER TABLE `booking` ADD CONSTRAINT `fk_booking_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);
+ALTER TABLE `booking` ADD CONSTRAINT `fk_booking_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
+ALTER TABLE `vendor` ADD CONSTRAINT `fk_vendor_verified_by` FOREIGN KEY (`verifiedBy`) REFERENCES `admin` (`adminID`);
+ALTER TABLE `client` ADD CONSTRAINT `fk_client_banned_by` FOREIGN KEY (`bannedBy`) REFERENCES `admin` (`adminID`);
+ALTER TABLE `auditLog` ADD CONSTRAINT `fk_audit_admin` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`);
+
+DELIMITER $$
+
+CREATE TRIGGER `trg_message_validate_sender_insert`
+BEFORE INSERT ON `message`
+FOR EACH ROW
+BEGIN
+    IF NEW.senderType = 'client' THEN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM `client`
+            WHERE `clientID` = NEW.senderID
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'message.senderID must reference client when senderType = client';
+        END IF;
+    ELSEIF NEW.senderType = 'vendor' THEN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM `vendor`
+            WHERE `vendorID` = NEW.senderID
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'message.senderID must reference vendor when senderType = vendor';
+        END IF;
+    ELSEIF NEW.senderType = 'admin' THEN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM `admin`
+            WHERE `adminID` = NEW.senderID
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'message.senderID must reference admin when senderType = admin';
+        END IF;
+    END IF;
+END$$
+
+CREATE TRIGGER `trg_message_validate_sender_update`
+BEFORE UPDATE ON `message`
+FOR EACH ROW
+BEGIN
+    IF NEW.senderType = 'client' THEN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM `client`
+            WHERE `clientID` = NEW.senderID
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'message.senderID must reference client when senderType = client';
+        END IF;
+    ELSEIF NEW.senderType = 'vendor' THEN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM `vendor`
+            WHERE `vendorID` = NEW.senderID
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'message.senderID must reference vendor when senderType = vendor';
+        END IF;
+    ELSEIF NEW.senderType = 'admin' THEN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM `admin`
+            WHERE `adminID` = NEW.senderID
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'message.senderID must reference admin when senderType = admin';
+        END IF;
+    END IF;
+END$$
+
+DELIMITER ;
