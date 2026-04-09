@@ -20,10 +20,10 @@ INSERT INTO `admin` (`firstName`, `lastName`, `username`, `password`, `email`, `
 -- ##########################################
 -- SECTION 3: VENDOR SEEDING (Professional Pete & Ali)
 -- ##########################################
-INSERT INTO `vendor` (`firstName`, `lastName`, `username`, `password`, `email`, `phoneNumber`, `vendorOrginisationRole`, `vendorOrginisationName`, `isVerified`, `automationScore`, `verifiedBy`, `verifiedAt`) VALUES
-('Ali', 'EMW', 'EMW_official', '$2y$10$VendorHash1', 'help@eventsmeetsworld.co.uk', '07714165861', 'Director', 'Events Meets World Ltd', TRUE, 100, 1, '2026-04-01 09:30:00'),
-('Pete', 'Professional', 'ProPete', '$2y$10$VendorHash2', 'pete@majesticmarquees.co.uk', '07123456789', 'Owner', 'Majestic Marquees Kent', TRUE, 85, 1, '2026-04-02 10:00:00'),
-('Sarah', 'Chef', 'OwenCater', '$2y$10$VendorHash3', 'info@owenbrothers.co.uk', '02086752905', 'Manager', 'Owen Brothers Catering', FALSE, 45, NULL, NULL);
+INSERT INTO `vendor` (`addressID`, `firstName`, `lastName`, `username`, `password`, `email`, `phoneNumber`, `vendorOrginisationRole`, `vendorOrginisationName`, `isVerified`, `automationScore`, `verifiedBy`, `verifiedAt`) VALUES
+(1, 'Ali', 'EMW', 'EMW_official', '$2y$10$VendorHash1', 'help@eventsmeetsworld.co.uk', '07714165861', 'Director', 'Events Meets World Ltd', TRUE, 100, 1, '2026-04-01 09:30:00'),
+(2, 'Pete', 'Professional', 'ProPete', '$2y$10$VendorHash2', 'pete@majesticmarquees.co.uk', '07123456789', 'Owner', 'Majestic Marquees Kent', TRUE, 85, 1, '2026-04-02 10:00:00'),
+(3, 'Sarah', 'Chef', 'OwenCater', '$2y$10$VendorHash3', 'info@owenbrothers.co.uk', '02086752905', 'Manager', 'Owen Brothers Catering', FALSE, 45, NULL, NULL);
 
 -- ##########################################
 -- SECTION 4: CLIENT SEEDING (Busy Becky)

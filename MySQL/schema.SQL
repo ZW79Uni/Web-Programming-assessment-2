@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `client` (
 
 CREATE TABLE IF NOT EXISTS `vendor` (
     `vendorID` BIGINT NOT NULL AUTO_INCREMENT,
+    `addressID` BIGINT NOT NULL,
     `firstName` VARCHAR(50) NOT NULL,
     `lastName` VARCHAR(50) NOT NULL,
     `username` VARCHAR(50) NOT NULL,
@@ -186,6 +187,7 @@ CREATE TABLE IF NOT EXISTS `clientFavorites` (
 
 -- Zach's Relationships
 ALTER TABLE `client` ADD CONSTRAINT `fk_client_address` FOREIGN KEY (`addressID`) REFERENCES `address` (`addressID`);
+ALTER TABLE `vendor` ADD CONSTRAINT `fk_vendor_address` FOREIGN KEY (`addressID`) REFERENCES `address` (`addressID`);
 ALTER TABLE `vendorServiceAllocation` ADD CONSTRAINT `fk_vsa_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`);
 ALTER TABLE `vendorServiceAllocation` ADD CONSTRAINT `fk_vsa_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
 ALTER TABLE `clientServiceAllocation` ADD CONSTRAINT `fk_csa_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);
