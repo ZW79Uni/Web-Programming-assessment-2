@@ -2,7 +2,7 @@
 USE `zw79_EMW_Database`;
 
 -- ##########################################
--- SECTION 1: TABLE DEFINITIONS
+-- SECTION 1: LDM TABLE DEFINITIONS
 -- ##########################################
 
 -- Zach's Tables
@@ -114,7 +114,30 @@ CREATE TABLE IF NOT EXISTS `eventTypeAllocation` (
 ) ENGINE=InnoDB;
 
 -- ##########################################
--- SECTION 2: RELATIONSHIPS (FOREIGN KEYS)
+-- SECTION 2: Updates for Scaling and Functionality
+-- ##########################################
+
+-- Add missing columns for Verification and Scaling
+ALTER TABLE `vendor` 
+ADD COLUMN `isVerified` BOOLEAN NOT NULL DEFAULT FALSE,
+ADD COLUMN `automationScore` INT DEFAULT 0;
+
+-- Add availability for matchmaking logic
+ALTER TABLE `service` 
+ADD COLUMN `isAvailable` BOOLEAN NOT NULL DEFAULT TRUE;
+
+-- Create the Bookmarks/Favorites table
+CREATE TABLE IF NOT EXISTS `clientFavorites` (
+    `favoriteID` BIGINT NOT NULL AUTO_INCREMENT,
+    `clientID` BIGINT NOT NULL,
+    `vendorID` BIGINT NOT NULL,
+    PRIMARY KEY (`favoriteID`),
+    CONSTRAINT `fk_fav_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`) ON DELETE CASCADE,
+    CONSTRAINT `fk_fav_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ##########################################
+-- SECTION 3: RELATIONSHIPS (FOREIGN KEYS)
 -- ##########################################
 
 -- Zach's Relationships
