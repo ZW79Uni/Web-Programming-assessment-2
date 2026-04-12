@@ -1,0 +1,112 @@
+<!DOCTYPE html
+<html>
+<style>
+    .container {
+    width: 2485px;  
+    height: 1250px;
+    border:5px solid black;
+    box-sizing: border-box;  
+}
+.Logo {
+    border:5px solid black;
+    width: 440px;
+    height: 258px;
+    float: left;
+    box-sizing: border-box;
+}
+
+.Nav {
+    border:5px solid black;
+    width: 2030px;  
+    height: 258px;
+    float: left;
+    box-sizing: border-box;  
+}
+
+.vendorContentContainer {
+    width: 2485px;  
+    height: 992px;
+    border:5px solid black;
+    float: left;
+    box-sizing: border-box;
+    padding-left: 100px;       
+}
+
+.newService {
+    width: 700px;  
+    height: 825px;
+    border:5px solid black;
+    float: left;
+    box-sizing: border-box; 
+    align-items: center;
+    text-align: center;
+}
+
+.existingService {
+    width: 1500px;
+    height: 412px;
+    border:5px solid black;
+    float: left;
+    box-sizing: border-box; 
+}
+
+.blogsAndChat {
+    width: 1500px;
+    height: 412px;
+    border:5px solid black;
+    float: left;
+    box-sizing: border-box; 
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.chatLocation {
+    position: absolute;
+    left: 1300px;
+    top: 950px;
+    width: 100px;
+    height: 50px;
+}
+.blogLocation {
+    position: absolute;
+    left: 1550px;
+    top: 950px;
+    width: 100px;
+    height: 50px;
+}
+</style> 
+<body>
+<div class="container clearfix">
+    <div class="Logo">
+        <h1>Logo here</h1>
+    </div>
+    <div class="Nav">
+        <h1>Vendor Navigation here</h1>
+    </div>
+    <div class="vendorContentContainer">
+        <h1>Vendor dash board content</h1>
+        <div class = "newService">
+            <h1>Enter a new service!</h1><br><br>
+            <h2><label for="serviceName">Service Name:</label>
+            <input style="width: 500px;" type="text" id="serviceName" name="serviceName"></h2><br><br>
+            <h2><label for="servicePrice:">Service Price: £</label>
+            <input style="width: 500px;" type="text" id="servicePrice" name="servicePrice"></h2><br><br>
+            <h2><label for="serviceDecription:">Service Decription:</label><br>
+            <input style="width: 500px; height: 200px;" type="text" id="serviceDecription" name="serviceDecription"></h2><br><br>
+            <button style="width: 100px; height: 50px;" type="button" name="Submit">Submit</button>
+        </div>
+        <div class="existingService">
+            <h1>Existing Services here</h1>
+        </div>
+        <div class="blogsAndChat">
+            <h1>Blogs and chat</h1>
+            <button class="blogLocation" name="blog">Post Blogs</button>
+            <button class="chatLocation" name="chat">Chat with clients</button>
+        </div>
+    </div>
+</div>
+</body>  
+</html>
