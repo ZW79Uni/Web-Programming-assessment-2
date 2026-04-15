@@ -1,0 +1,10 @@
+migrate to react / node environment
+seperate css , html , js, into organized folders
+
+example:
+index.php       → main HTML skeleton with minimal PHP
+logic.php       → PHP functions / data processing
+header.php      → reusable HTML head section
+footer.php      → reusable footer
+
+->> repeat for each page, and follow information architecture closely to avoid confusion
