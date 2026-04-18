@@ -1,5 +1,5 @@
 -- Target the specific database provided by cPanel
-USE `zw79_EMW_Database`;
+USE `h6zp02h_EMW_Database`;
 
 -- ##########################################
 -- SECTION 1: LDM TABLE DEFINITIONS

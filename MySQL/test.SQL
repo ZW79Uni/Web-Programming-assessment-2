@@ -1,4 +1,4 @@
-USE `zw79_EMW_Database`;
+USE `h6zp02h_EMW_Database`;
 
 -- Trackable integration checks for UI readiness
 CREATE TEMPORARY TABLE IF NOT EXISTS `test_results` (

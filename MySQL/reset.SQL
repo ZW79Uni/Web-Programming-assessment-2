@@ -4,7 +4,7 @@
 -- ##########################################
 
 -- Ensure we are targeting the correct database
-USE `zw79_EMW_Database`;
+USE `h6zp02h_EMW_Database`;
 
 -- Disable constraints to allow a "nuclear" drop
 SET FOREIGN_KEY_CHECKS = 0;
