@@ -31,6 +31,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    float: left;
 }
 
 .chatSelected {
@@ -75,16 +76,24 @@
 }
 
 .chat {
-    border:5px solid black;
+    border: 5px solid black;
     width: 2030px;  
     height: 992px;
     box-sizing: border-box;  
+    overflow-y: auto;
+    background-color: #fff;
 }
 
 .clearfix::after {
     content: "";
     clear: both;
     display: table;
+}
+
+.message {
+    border: 1px solid red;
+    padding: 5px;
+    margin: 5px;
 }
 
 </style>
@@ -97,58 +106,71 @@
         <h1>Navigation here</h1>
     </div>
     <div class="chatPicker">
-        <div class="chatSelected">
-            <!-- Profile Picture and Text Container -->
-            <div style="display: flex; align-items: center;">
-                <img src="blank pfp.png" width="40" height="40">
+	<?php
+	$servername = "localhost";
+	$username = "h6zp02h_WebAccess";
+	$password = "SparrowHawk26!";
+	$dbname = "h6zp02h_EMW_Database";
+
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+
+	$clientID = 1;
+
+	$sql = "
+	SELECT chat.chatID, chat.vendorID, vendor.firstName, vendor.lastName, vendor.vendorOrginisationName
+	FROM chat
+	JOIN vendor ON chat.vendorID = vendor.vendorID
+	WHERE chat.clientID = $clientID
+	";
+
+	$result = $conn->query($sql);
+
+	if ($result->num_rows > 0) {
+    	while($row = $result->fetch_assoc()) {
+        	$chatID = $row['chatID'];
+        	$vendorName = htmlspecialchars($row['firstName'] . ' ' . $row['lastName']);
+        	$vendorOrg = htmlspecialchars($row['vendorOrginisationName']);
+        echo "
+        <div class='chatSelected' data-chatid='$chatID'>
+            <div style='display: flex; align-items: center;'>
+                <img src='blank pfp.png' width='40' height='40'>
                 <div>
-                    <?php
-                        $servername = "localhost";
-                        $username = "h6zp02h_WebAccess";
-                        $password = "SparrowHawk26!";
-                        $dbname = "h6zp02h_EMW_Database";
-
-                        $conn = new mysqli($servername, $username, $password, $dbname);
-
-                        if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                        }
-
-                        $clientID = 1;
-
-                        $sql = "
-                        SELECT chat.vendorID, vendor.firstName, vendor.lastName, vendor.vendorOrginisationName
-                        FROM chat
-                        JOIN vendor ON chat.vendorID = vendor.vendorID
-                        WHERE chat.clientID = $clientID
-                        ";
-
-                        $result = $conn->query($sql);
-
-                        if ($result === false) {
-                            die("Query failed: " . $conn->error);
-                        }
-
-                        if ($result->num_rows > 0) {
-                            while($row = $result->fetch_assoc()) {
-                            	
-                                $vendorName = htmlspecialchars($row['firstName'] . ' ' . $row['lastName']);
-                                $vendorOrg  = htmlspecialchars($row['vendorOrginisationName']);
-                                echo "Chat with: $vendorName <br>from: $vendorOrg<br>";
-                            }
-                        } else {
-                            echo "No results found";
-                        }
-
-                        $conn->close();
-                    ?>
+                    Chat with: $vendorName <br>from: $vendorOrg
                 </div>
             </div>
-        </div>
+        </div>";
+        }
+        } else {
+    		echo "No results found";
+    	}
+
+	$conn->close();
+	?>
+	</div>
     </div>
     <div class="chat">
         <h1>chat here</h1>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	const chats = document.querySelectorAll('.chatSelected');
+	const chatBox = document.querySelector('.chat');
+	
+	chats.forEach(chat => {
+		chat.addEventListener('click', function() {
+			const chatID = this.getAttribute('data-chatid');
+			
+			fetch(`get_messages.php?chatID=${chatID}`)
+    				.then(response => response.text())
+    				.then(data => {
+        			chatBox.innerHTML = data; // insert messages
+    				})
+    			.catch(err => console.error(err));
+        });
+    });
+});
+</script>
 </body>
 </html>
