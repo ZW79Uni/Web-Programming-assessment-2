@@ -78,7 +78,7 @@
 .chat {
     border: 5px solid black;
     width: 2030px;  
-    height: 992px;
+    height: 990px;
     box-sizing: border-box;  
     overflow-y: auto;
     background-color: #fff;
@@ -150,25 +150,61 @@
 	</div>
     </div>
     <div class="chat">
-        <h1>chat here</h1>
+    	<div id="messagesArea">
+        	<h1>chat here</h1>
+    	</div>
+
+    	<div id="messageInputArea" style="border-top: 2px solid black; padding: 10px;">
+        	<input type="text" id="messageInput" placeholder="Type a message..." style="width:80%;">
+        <button id="sendBtn">Send</button>
     </div>
+</div>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-	const chats = document.querySelectorAll('.chatSelected');
-	const chatBox = document.querySelector('.chat');
-	
-	chats.forEach(chat => {
-		chat.addEventListener('click', function() {
-			const chatID = this.getAttribute('data-chatid');
-			
-			fetch(`get_messages.php?chatID=${chatID}`)
-    				.then(response => response.text())
-    				.then(data => {
-        			chatBox.innerHTML = data; // insert messages
-    				})
-    			.catch(err => console.error(err));
+    const chats = document.querySelectorAll('.chatSelected');
+    const chatBox = document.querySelector('#messagesArea');
+    const sendBtn = document.getElementById('sendBtn');
+    const messageInput = document.getElementById('messageInput');
+
+    let currentChatID = null;
+
+    chats.forEach(chat => {
+        chat.addEventListener('click', function() {
+            currentChatID = this.getAttribute('data-chatid');
+
+            fetch(`get_messages.php?chatID=${currentChatID}`)
+                .then(response => response.text())
+                .then(data => {
+                    chatBox.innerHTML = data;
+                })
+                .catch(err => console.error(err));
         });
+    });
+
+    sendBtn.addEventListener('click', function() {
+        const message = messageInput.value.trim();
+
+        if (!message || !currentChatID) return;
+
+        fetch('send_message.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `chatID=${currentChatID}&message=${encodeURIComponent(message)}`
+        })
+        .then(response => response.text())
+        .then(() => {
+            messageInput.value = '';
+
+            return fetch(`get_messages.php?chatID=${currentChatID}`);
+        })
+        .then(response => response.text())
+        .then(data => {
+            chatBox.innerHTML = data;
+        })
+        .catch(err => console.error(err));
     });
 });
 </script>
