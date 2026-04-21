@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `message` (
 CREATE TABLE IF NOT EXISTS `blog` (
     `blogID` BIGINT NOT NULL AUTO_INCREMENT,
     `posterID` BIGINT NOT NULL,
-    `posterType` ENUM('admin') NOT NULL DEFAULT 'admin',
+    `posterType` ENUM('admin', 'vendor') NOT NULL DEFAULT 'admin',
     `blogContent` MEDIUMBLOB NOT NULL,
     PRIMARY KEY (`blogID`)
 ) ENGINE=InnoDB;
@@ -200,7 +200,6 @@ ALTER TABLE `chat` ADD CONSTRAINT `fk_chat_client` FOREIGN KEY (`clientID`) REFE
 ALTER TABLE `chat` ADD CONSTRAINT `fk_chat_vendor` FOREIGN KEY (`vendorID`) REFERENCES `vendor` (`vendorID`);
 ALTER TABLE `chat` ADD CONSTRAINT `uq_chat_client_vendor` UNIQUE (`clientID`, `vendorID`);
 ALTER TABLE `message` ADD CONSTRAINT `fk_msg_chat` FOREIGN KEY (`chatID`) REFERENCES `chat` (`chatID`);
-ALTER TABLE `blog` ADD CONSTRAINT `fk_blog_admin` FOREIGN KEY (`posterID`) REFERENCES `admin` (`adminID`);
 ALTER TABLE `eventTypeAllocation` ADD CONSTRAINT `fk_eta_service` FOREIGN KEY (`serviceID`) REFERENCES `service` (`serviceID`);
 ALTER TABLE `eventTypeAllocation` ADD CONSTRAINT `fk_eta_type` FOREIGN KEY (`eventTypeID`) REFERENCES `eventType` (`eventTypeID`);
 ALTER TABLE `review` ADD CONSTRAINT `fk_review_client` FOREIGN KEY (`clientID`) REFERENCES `client` (`clientID`);

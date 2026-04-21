@@ -23,19 +23,18 @@ WHERE a.county = 'Kent'
 ORDER BY v.automationScore DESC, s.servicePrice ASC;
 
 -- ==========================================
--- STORY 2: Confirmed Booking Dashboard
+-- STORY 2: Vendor Showcase / Vendor Portal (Proud Pete)
+-- Vendors uploading high-res video blog showcases to prove quality
 -- ==========================================
+-- (Simulated query for showcasing vendor's approved high-res 'blog/portfolio' content)
 SELECT
-    c.firstName AS `Client`,
-    v.vendorOrginisationName AS `Supplier`,
-    s.serviceName AS `Item`,
-    b.eventDate AS `Event Date`,
-    b.status AS `Booking Status`
-FROM `booking` b
-JOIN `client` c ON b.clientID = c.clientID
-JOIN `vendor` v ON b.vendorID = v.vendorID
-JOIN `service` s ON b.serviceID = s.serviceID
-WHERE b.status = 'confirmed';
+    b.blogID AS `Post ID`,
+    v.vendorOrginisationName AS `Vendor`,
+    v.vendorOrginisationRole AS `Role`,
+    LENGTH(b.blogContent) AS `Blog Payload Size (Bytes)`
+FROM `blog` b
+JOIN `vendor` v ON b.posterID = v.vendorID
+WHERE b.posterType = 'vendor';
 
 -- ==========================================
 -- STORY 3: Trust and Reputation System
@@ -65,7 +64,7 @@ ORDER BY `Average Stars` DESC;
 -- This lets the script continue and reports expected rejection as PASSED.
 -- ==========================================
 DROP PROCEDURE IF EXISTS `sp_story_04_check`;
-DELIMITER $$
+DELIMITER //
 CREATE PROCEDURE `sp_story_04_check`()
 BEGIN
     DECLARE rejected BOOLEAN DEFAULT FALSE;
@@ -87,7 +86,7 @@ BEGIN
         IF(rejected,
            'Invalid sender blocked by trigger.',
            'Invalid sender unexpectedly accepted.') AS `Details`;
-END$$
+END //
 DELIMITER ;
 
 CALL `sp_story_04_check`();
@@ -105,3 +104,36 @@ SELECT
 FROM `auditLog` al
 JOIN `admin` a ON al.adminID = a.adminID
 ORDER BY al.actionDate DESC;
+
+-- ==========================================
+-- STORY 6: Chat Function (Becky)
+-- Client chatting with a vendor to obtain clarity on booking
+-- ==========================================
+SELECT
+    c.chatID AS `Chat Thread`,
+    m.senderType AS `Sender Role`,
+    IF(m.senderType = 'client', cl.firstName, 
+       IF(m.senderType = 'vendor', v.vendorOrginisationName, 'Admin')) AS `Name`,
+    m.messageContent AS `Message Payload`
+FROM `message` m
+JOIN `chat` c ON m.chatID = c.chatID
+JOIN `client` cl ON c.clientID = cl.clientID
+JOIN `vendor` v ON c.vendorID = v.vendorID
+WHERE c.clientID = 1 AND c.vendorID = 2
+ORDER BY m.messageID ASC;
+
+-- ==========================================
+-- STORY 7: Service Catalogue (Proud Pete)
+-- Vendor showcasing the specific services they offer
+-- ==========================================
+SELECT
+    v.vendorOrginisationName AS `Vendor`,
+    s.serviceName AS `Service Offered`,
+    s.serviceDecription AS `Description`,
+    s.servicePrice AS `Price (£)`,
+    IF(s.isAvailable, 'Yes', 'No') AS `Currently Available?`
+FROM `service` s
+JOIN `vendorServiceAllocation` vsa ON s.serviceID = vsa.serviceID
+JOIN `vendor` v ON vsa.vendorID = v.vendorID
+WHERE v.vendorOrginisationName = 'Majestic Marquees Kent'
+ORDER BY s.servicePrice ASC;

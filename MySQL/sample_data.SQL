@@ -81,6 +81,10 @@ INSERT INTO `auditLog` (`adminID`, `actionType`, `targetType`, `targetID`, `reas
 (1, 'verify_vendor', 'vendor', 2, 'Insurance and portfolio checks completed.'),
 (1, 'update_service', 'service', 2, 'Updated marquee availability and pricing checks.');
 
+INSERT INTO `blog` (`posterID`, `posterType`, `blogContent`) VALUES
+(2, 'vendor', '0xFFD8FFE000104A46494600010101006000600000FFDB004300'), -- Hex data representing Image payload
+(2, 'vendor', '0x00000020667479706D703432000000006D7034326D703431'); -- Hex data representing MP4 video payload
+
 INSERT INTO `chat` (`clientID`, `vendorID`) VALUES
 (1, 2);
 

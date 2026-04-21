@@ -59,7 +59,7 @@ VALUES (
 
 -- DB-INT-03: Trigger Security (invalid sender membership)
 DROP PROCEDURE IF EXISTS `sp_test_db_int_03`;
-DELIMITER $$
+DELIMITER //
 CREATE PROCEDURE `sp_test_db_int_03`()
 BEGIN
     DECLARE did_fail BOOLEAN DEFAULT FALSE;
@@ -86,7 +86,7 @@ BEGIN
             'Invalid membership insert was accepted unexpectedly.'
         )
     );
-END$$
+END //
 DELIMITER ;
 
 CALL `sp_test_db_int_03`();

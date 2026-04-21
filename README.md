@@ -22,7 +22,7 @@ Run a clean rebuild:
 
 ```powershell
 $mysql='C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe'
-& $mysql -u root -e "DROP DATABASE IF EXISTS zw79_EMW_Database; CREATE DATABASE zw79_EMW_Database CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+& $mysql -u root -e "DROP DATABASE IF EXISTS h6zp02h_EMW_Database; CREATE DATABASE h6zp02h_EMW_Database CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 cmd /c '"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root < .\MySQL\schema.SQL'
 cmd /c '"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root < .\MySQL\sample_data.SQL'
 cmd /c '"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root < .\MySQL\test.SQL'
