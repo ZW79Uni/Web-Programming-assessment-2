@@ -1,0 +1,85 @@
+﻿
+header {
+    background: linear-gradient(120deg, #E15050, #E15050);
+    color: #ffffff;
+    padding: 60px 20px;
+    text-align: left;
+}
+
+.navigationHeader {
+    border: 3px solid black;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.aboutusHeader {
+    border: 3px solid black;
+    text-align: center;
+    width: 500px;
+    height: 150px;
+    float: left;
+}
+.eventHeader {
+    border: 3px solid black;
+    text-align: center;
+    width: 500px;
+    height: 150px;
+    float: right;
+}
+
+button {
+    background-color: #ffffff;
+    border: 2PX solid #B2B2B2;
+    color: #E15050;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+body {
+    font-family: "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    background: #ffffff;
+    color: #E15050;
+    text-align: left;
+}
+
+.container {
+    width: 1940px;
+    height: 1080px;
+    box-sizing: border-box;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.eventHolder {
+    margin-top: 10px;
+    border: 3px solid black;
+    width: 450px;
+    height: 350px;
+    margin-left: 960px;
+    text-align: center;
+}
+
+.searchEvent {
+    margin-top: 10px;
+    border: 3px solid black;
+    width: 450px;
+    height: 350px;
+    margin-left: 960px;
+    text-align: center;
+}
+
+footer {
+    background: linear-gradient(120deg, #E15050, #E15050);
+    color: #ffffff;
+    padding: 60px 20px;
+    text-align: left;
+}
