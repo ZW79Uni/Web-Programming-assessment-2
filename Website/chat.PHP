@@ -1,51 +1,74 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
+
+<title>Vendor Chat Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
+header {
+    background: #E15050;
+    color: #ffffff;
+    padding: 20px 2vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .container {
-    width: 2485px;  
-    height: 1250px;
+    width: 100%;
+    height: calc(100vh - 40vh);
     border:5px solid black;
     box-sizing: border-box;  
+    display: flex;
+    flex-wrap: nowrap;
 }
 
 .Logo {
     border:5px solid black;
-    width: 440px;
-    height: 258px;
-    float: left;
+    width: 20%;
+    height: auto;
     box-sizing: border-box;
 }
 
 .Nav {
     border:5px solid black;
-    width: 2030px;  
-    height: 258px;
-    float: left;
+    width: 80%;
+    height: auto;
     box-sizing: border-box;  
 }
 
 .chatPicker {
     border:5px solid black;
-    width: 440px;
-    height: 992px;
+    width: 20%;
+    height: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    float: left;
+    overflow-y: auto;
+    padding: 10px;
 }
 
 .chatSelected {
     background-image: url(chatBG.png);
-    height: 40px;
-    width: 430px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    margin-bottom: 5px;
     background-size: cover; 
     background-position: center;         
     box-sizing: border-box;
     transition: transform 0.3s ease;
-    
+}
+
+.chatSelected div {
+    width: 100%;
 }
 
 .chatSelected img {
+    flex-shrink: 0;
     margin-right: 10px;  
 }
 
@@ -58,30 +81,22 @@
 }
 
 @keyframes shake {
-    0% {
-        transform: translateX(0);
-    }
-    25% {
-        transform: translateX(-10px);
-    }
-    50% {
-        transform: translateX(10px);
-    }
-    75% {
-        transform: translateX(-10px);
-    }
-    100% {
-        transform: translateX(0);
-    }
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
 }
 
 .chat {
     border: 5px solid black;
-    width: 2030px;  
-    height: 990px;
+    width: 80%;  
+    height: 100%;
     box-sizing: border-box;  
     overflow-y: auto;
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
 }
 
 .clearfix::after {
@@ -96,70 +111,93 @@
     margin: 5px;
 }
 
+footer {
+    background: linear-gradient(120deg, #E15050, #E15050);
+    color: #ffffff;
+    padding: 10vh 2vw;
+    text-align: left;
+}
+
+#messageInputArea {
+    display: flex;
+    border-top: 2px solid black;
+    padding: 10px;
+}
+
+#messageInput {
+    width: 80%;
+}
+
+#sendBtn {
+    width: 18%;
+    margin-left: 2%;
+}
 </style>
+
+<header>
+<h1>Events Meets World</h1>
+<button>Return Home</button>
+</header>
+
 <body>
 <div class="container clearfix">
-    <div class="Logo">
-        <h1>Logo here</h1>
-    </div>
-    <div class="Nav">
-        <h1>Navigation here</h1>
-    </div>
     <div class="chatPicker">
-	<?php
-	$servername = "localhost";
-	$username = "h6zp02h_WebAccess";
-	$password = "SparrowHawk26!";
-	$dbname = "h6zp02h_EMW_Database";
+        <h3>Select A chat!</h3>
+        <?php
+        $servername = "localhost";
+        $username = "h6zp02h_WebAccess";
+        $password = "SparrowHawk26!";
+        $dbname = "h6zp02h_EMW_Database";
 
-	$conn = new mysqli($servername, $username, $password, $dbname);
-	if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 
-	$clientID = 1;
+        $clientID = 1;
 
-	$sql = "
-	SELECT chat.chatID, chat.vendorID, vendor.firstName, vendor.lastName, vendor.vendorOrginisationName
-	FROM chat
-	JOIN vendor ON chat.vendorID = vendor.vendorID
-	WHERE chat.clientID = $clientID
-	";
+        $sql = "
+        SELECT chat.chatID, chat.vendorID, vendor.firstName, vendor.lastName, vendor.vendorOrginisationName
+        FROM chat
+        JOIN vendor ON chat.vendorID = vendor.vendorID
+        WHERE chat.clientID = $clientID
+        ";
 
-	$result = $conn->query($sql);
+        $result = $conn->query($sql);
 
-	if ($result->num_rows > 0) {
-    	while($row = $result->fetch_assoc()) {
-        	$chatID = $row['chatID'];
-        	$vendorName = htmlspecialchars($row['firstName'] . ' ' . $row['lastName']);
-        	$vendorOrg = htmlspecialchars($row['vendorOrginisationName']);
-        echo "
-        <div class='chatSelected' data-chatid='$chatID'>
-            <div style='display: flex; align-items: center;'>
-                <img src='blank pfp.png' width='40' height='40'>
-                <div>
-                    Chat with: $vendorName <br>from: $vendorOrg
-                </div>
-            </div>
-        </div>";
-        }
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $chatID = $row['chatID'];
+                $vendorName = htmlspecialchars($row['firstName'] . ' ' . $row['lastName']);
+                $vendorOrg = htmlspecialchars($row['vendorOrginisationName']);
+                echo "
+                <div class='chatSelected' data-chatid='$chatID'>
+                    <div style='display: flex; align-items: center;'>
+                        <img src='blank pfp.png' width='40' height='40'>
+                        <div>
+                            Chat with: $vendorName <br>from: $vendorOrg
+                        </div>
+                    </div>
+                </div>";
+            }
         } else {
-    		echo "No results found";
-    	}
+            echo "No results found";
+        }
 
-	$conn->close();
-	?>
-	</div>
+        $conn->close();
+        ?>
     </div>
+
     <div class="chat">
-    	<div id="messagesArea">
-        	<h1>chat here</h1>
-    	</div>
+        <div id="messagesArea">
+            <h2>Select a chat and get planning!</h2>
+        </div>
 
-    	<div id="messageInputArea" style="border-top: 2px solid black; padding: 10px;">
-        	<input type="text" id="messageInput" placeholder="Type a message..." style="width:80%;">
-        <button id="sendBtn">Send</button>
+        <div id="messageInputArea">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button id="sendBtn">Send</button>
+        </div>
     </div>
 </div>
-</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const chats = document.querySelectorAll('.chatSelected');
@@ -197,16 +235,21 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.text())
         .then(() => {
             messageInput.value = '';
-
             return fetch(`get_messages.php?chatID=${currentChatID}`);
         })
         .then(response => response.text())
         .then(data => {
             chatBox.innerHTML = data;
+            chatBox.scrollTop = chatBox.scrollHeight;
         })
         .catch(err => console.error(err));
     });
 });
 </script>
+
+<footer>
+<h1>About us, Accolades, etc...</h1>
+</footer>
+
 </body>
 </html>

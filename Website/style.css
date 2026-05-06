@@ -1,15 +1,28 @@
-﻿
 header {
-    background: linear-gradient(120deg, #E15050, #E15050);
+    background: #E15050;
     color: #ffffff;
     padding: 60px 20px;
-    text-align: left;
+    width: 100%;
 }
 
 .navigationHeader {
-    border: 3px solid black;
+    background: linear-gradient(120deg, #E15050, #E15050);
+    display: flex;
+    width: 100%;
+}
+
+.navChild {
+    flex: 1;
+    border: solid black;
     text-align: center;
-    box-sizing: border-box;
+    height: 38px;
+    width: 25%;
+    colour: white;
+    font-weight: bold;
+}
+
+a:link {
+  color: white;
 }
 
 .aboutusHeader {
@@ -48,9 +61,8 @@ body {
 }
 
 .container {
-    width: 1940px;
-    height: 1080px;
-    box-sizing: border-box;
+    width: 100%;
+    min-height: 100vh;
 }
 
 .clearfix::after {
