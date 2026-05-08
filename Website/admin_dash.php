@@ -11,6 +11,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 $adminID = $_SESSION['adminID'] ?? 1;
 
 // Handle Actions (Ban Client / Verify Vendor)
+// Added inline comments for technical documentation
+// We perform updates to 'client' or 'vendor' and log these to 'auditLog'
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
     if ($action === 'ban_client' && isset($_POST['clientID'])) {

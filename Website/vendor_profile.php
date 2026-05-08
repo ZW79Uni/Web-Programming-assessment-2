@@ -41,6 +41,9 @@ $vendorResult = $conn->query($vendorQuery);
 $vendorData = $vendorResult ? $vendorResult->fetch_assoc() : [];
 
 // Calculate Badges (Demo logic for 'badges / star ratings' request)
+// Technical Note: Currently evaluates the statically fetched boolean `isVerified`
+// and integer `automationScore`. In a deployed real-world environment, this would
+// aggregate `rating` from the `review` table and calculate live percentage.
 $badges = [];
 if (!empty($vendorData['isVerified'])) {
     $badges[] = "🌟 Verified Vendor";
