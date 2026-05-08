@@ -35,15 +35,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_result($id, $dbPassword);
             $stmt->fetch();
             if ($passwordInput === $dbPassword) {
-                $_SESSION['user_id'] = $id;
+                $_SESSION[$idField] = $id; // Set specific ID (vendorID, adminID, clientID) to map to our new pages
                 $_SESSION['role'] = $role;
                 if ($role === 'vendor') {
                     $stmt->close();
                     $conn->close();
-                    header("Location: vendorDashBoard.HTML");
+                    header("Location: vendor_profile.php"); // Updated from vendorDashBoard.HTML
+                    exit;
+                } elseif ($role === 'admin') {
+                    $stmt->close();
+                    $conn->close();
+                    header("Location: admin_dash.php"); // Stitched admin routing
                     exit;
                 } else {
                     echo "<script>alert('Login successful for $role.');</script>";
+                    // TODO: Redirect client to Client Dashboard once Zach finishes it
                 }
             } else {
                 echo "<script>alert('Incorrect password.');</script>";
