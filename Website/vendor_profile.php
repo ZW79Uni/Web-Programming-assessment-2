@@ -147,16 +147,7 @@ $bookingsResult = $conn->query("
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>EMW Vendor Portal</h1>
-            <h3>Welcome, <?php echo htmlspecialchars($vendorData['firstName'] ?? 'Vendor'); ?> (<?php echo htmlspecialchars($vendorData['vendorOrginisationName'] ?? 'No Org'); ?>)</h3>
-        </div>
-        <div class="nav">
-            <a href="about.html">About</a> 
-            <a href="#">Event</a> 
-            <a href="faq.html">FAQ</a> 
-            <a href="vendor_profile.php">Vendor Dashboard</a>
-        </div>
+        <?php include 'global_header.php'; ?>
         
         <!-- Badges / Rating Row -->
         <div style="margin-bottom: 20px; text-align: center;">
@@ -237,9 +228,7 @@ $bookingsResult = $conn->query("
             </div>
         </div>
 
-        <div class="footer">
-            <p>Copyright © Events Meets Worlds</p>
-        </div>
+        <?php include 'global_footer.php'; ?>
     </div>
 </body>
 </html>

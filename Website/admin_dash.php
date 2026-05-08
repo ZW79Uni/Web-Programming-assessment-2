@@ -112,16 +112,7 @@ $blogsResult = $conn->query("SELECT `blogID`, `posterType`, `posterID`, LEFT(CAS
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>EMW Admin Dashboard</h1>
-            <h3>System Moderation & Verifications</h3>
-        </div>
-        <div class="nav">
-            <a href="about.html">About</a> 
-            <a href="#">Event</a> 
-            <a href="faq.html">FAQ</a> 
-            <a href="admin_dash.php">Admin Dashboard</a>
-        </div>
+        <?php include 'global_header.php'; ?>
         
         <div class="content">
             <div class="panel">
@@ -205,9 +196,7 @@ $blogsResult = $conn->query("SELECT `blogID`, `posterType`, `posterID`, LEFT(CAS
             </div>
         </div>
 
-        <div class="footer">
-            <p>Copyright © Events Meets Worlds</p>
-        </div>
+        <?php include 'global_footer.php'; ?>
     </div>
 </body>
 </html>
