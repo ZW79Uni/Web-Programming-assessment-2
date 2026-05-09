@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `vendor` (
     `vendorOrginisationName` VARCHAR(50) NOT NULL,
     `verifiedBy` BIGINT NULL,
     `verifiedAt` TIMESTAMP NULL DEFAULT NULL,
+    'vendorDescription' VARCHAR(2000) NOT NULL DEFAULT 'No Description given'
     PRIMARY KEY (`vendorID`)
 ) ENGINE=InnoDB;
 

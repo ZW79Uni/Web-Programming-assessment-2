@@ -37,6 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($passwordInput === $dbPassword) {
                 $_SESSION['user_id'] = $id;
                 $_SESSION['role'] = $role;
+                $_SESSION['loggedin'] = true;
+                if ($role === 'client') {
+                    $stmt->close();
+                    $conn->close();
+                    header("Location: clientDashBoard.php");
+                    exit;
+                }
                 if ($role === 'vendor') {
                     $stmt->close();
                     $conn->close();
