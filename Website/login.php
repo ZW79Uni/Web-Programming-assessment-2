@@ -1,5 +1,28 @@
 <?php
 session_start();
+
+// Handle logout
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit;
+}
+
+// Redirect already logged-in users to dashboards
+if (isset($_SESSION['role'])) {
+    if ($_SESSION['role'] === 'vendor' && isset($_SESSION['vendorID'])) {
+        header("Location: vendor_profile.php");
+        exit;
+    } elseif ($_SESSION['role'] === 'admin' && isset($_SESSION['adminID'])) {
+        header("Location: admin_dash.php");
+        exit;
+    } elseif ($_SESSION['role'] === 'client' && isset($_SESSION['clientID'])) {
+        header("Location: clientDashBoard.php");
+        exit;
+    }
+}
+
 $servername = "localhost";
 $username = "h6zp02h_WebAccess";
 $password = "SparrowHawk26!";
@@ -35,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_result($id, $dbPassword);
             $stmt->fetch();
             if ($passwordInput === $dbPassword) {
-                $_SESSION['user_id'] = $id;
+                $_SESSION[$idField] = $id;
                 $_SESSION['role'] = $role;
                 $_SESSION['loggedin'] = true;
                 if ($role === 'client') {
@@ -55,9 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $conn->close();
                     header("Location: admin_dash.php");
                     exit;
-                }
-                else {
-                	echo "Fatal error";
                 }
             } else {
                 echo "<script>alert('Incorrect password.');</script>";
