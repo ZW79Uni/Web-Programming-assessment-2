@@ -1,4 +1,3 @@
-<div class="footer">
-    <p>Copyright © Events Meets Worlds</p>
-    <p><a href="about.html">Contact Us</a> | <a href="faq.html">Help Center</a></p>
-</div>
+<footer style="background-color: #E15050; color: #ffffff; padding: 20px; text-align: left; margin-top: 50px; font-weight: bold; text-transform: uppercase;">
+    COPYRIGHT, ACCOLADES, MAILING LIST, ETC
+</footer>

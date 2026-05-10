@@ -1,0 +1,80 @@
+[10-May-2026 19:07:42 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 19:07:47 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 19:07:47 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 19:17:06 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 19:17:10 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 19:31:19 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:21 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:22 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:26 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:51 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:52 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:52 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:52 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:52 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:52 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:53 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:31:54 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:32:01 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 19:32:04 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 237
+[10-May-2026 19:35:15 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 240
+[10-May-2026 19:35:15 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 240
+[10-May-2026 19:35:18 UTC] PHP Parse error:  Unclosed '{' on line 10 in /home/h6zp02h/public_html/login.php on line 240
+[10-May-2026 20:01:17 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:01:17 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:01:54 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:01:54 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:02:24 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:02:24 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:03:51 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/vendorDetails.php on line 3
+[10-May-2026 20:03:51 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:03:51 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:03:51 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/vendorDetails.php on line 3
+[10-May-2026 20:03:51 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:03:51 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:04:04 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/vendorDetails.php on line 3
+[10-May-2026 20:04:04 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:04:04 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:04:17 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:04:23 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:06:12 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function isLoggedIn() in /home/h6zp02h/public_html/clientDashBoard.php:109
+Stack trace:
+#0 {main}
+  thrown in /home/h6zp02h/public_html/clientDashBoard.php on line 109
+[10-May-2026 20:06:20 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/vendorDetails.php on line 3
+[10-May-2026 20:06:20 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:06:20 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:15:27 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:17:58 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:18:05 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function isLoggedIn() in /home/h6zp02h/public_html/clientDashBoard.php:109
+Stack trace:
+#0 {main}
+  thrown in /home/h6zp02h/public_html/clientDashBoard.php on line 109
+[10-May-2026 20:20:32 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function isLoggedIn() in /home/h6zp02h/public_html/clientDashBoard.php:109
+Stack trace:
+#0 {main}
+  thrown in /home/h6zp02h/public_html/clientDashBoard.php on line 109
+[10-May-2026 20:26:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function isLoggedIn() in /home/h6zp02h/public_html/clientDashBoard.php:109
+Stack trace:
+#0 {main}
+  thrown in /home/h6zp02h/public_html/clientDashBoard.php on line 109
+[10-May-2026 20:28:02 UTC] PHP Warning:  Undefined array key "vendorID" in /home/h6zp02h/public_html/vendor_profile.php on line 15
+[10-May-2026 20:28:02 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') as avgRating 
+                FROM `vendor` WHERE `vendorID` =' at line 2 in /home/h6zp02h/public_html/vendor_profile.php:89
+Stack trace:
+#0 /home/h6zp02h/public_html/vendor_profile.php(89): mysqli->query('SELECT `firstNa...')
+#1 {main}
+  thrown in /home/h6zp02h/public_html/vendor_profile.php on line 89
+[10-May-2026 20:47:12 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function isLoggedIn() in /home/h6zp02h/public_html/clientDashBoard.php:109
+Stack trace:
+#0 {main}
+  thrown in /home/h6zp02h/public_html/clientDashBoard.php on line 109
+[10-May-2026 20:48:53 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function isLoggedIn() in /home/h6zp02h/public_html/clientDashBoard.php:109
+Stack trace:
+#0 {main}
+  thrown in /home/h6zp02h/public_html/clientDashBoard.php on line 109
+[10-May-2026 20:49:21 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/h6zp02h/public_html/global_header.php on line 4
+[10-May-2026 20:51:53 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function isLoggedIn() in /home/h6zp02h/public_html/clientDashBoard.php:109
+Stack trace:
+#0 {main}
+  thrown in /home/h6zp02h/public_html/clientDashBoard.php on line 109

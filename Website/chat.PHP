@@ -13,18 +13,9 @@ $role = $_SESSION['role'];
 
 <title>Vendor Chat Page</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
 
 <style>
-header {
-    background: #E15050;
-    color: #ffffff;
-    padding: 20px 2vw;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-}
 
 .container {
     width: 100%;
@@ -61,16 +52,15 @@ header {
 }
 
 .chatSelected {
-    background-image: url(chatBG.png);
+    color: #ffffff;
     width: 100%;
     display: flex;
     align-items: center;
     padding: 5px 10px;
     margin-bottom: 5px;
-    background-size: cover; 
-    background-position: center;         
     box-sizing: border-box;
     transition: transform 0.3s ease;
+    background-color: #E15050;
 }
 
 .chatSelected div {
@@ -144,10 +134,7 @@ footer {
 }
 </style>
 
-<header>
-<h1>Events Meets World</h1>
-<button>Return Home</button>
-</header>
+<?php include 'global_header.php'; ?>
 
 <body>
 <div class="container clearfix">
@@ -280,9 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<footer>
-<h1>About us, Accolades, etc...</h1>
-</footer>
+<?php include 'global_footer.php'; ?>
 
 </body>
 </html>

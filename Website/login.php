@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_result($id, $dbPassword);
             $stmt->fetch();
             if ($passwordInput === $dbPassword) {
-                $_SESSION[$idField] = $id; // Set specific ID (vendorID, adminID, clientID) to map to our new pages
+                $_SESSION['user_id'] = $id;
                 $_SESSION['role'] = $role;
                 $_SESSION['loggedin'] = true;
                 if ($role === 'client') {
@@ -47,16 +47,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($role === 'vendor') {
                     $stmt->close();
                     $conn->close();
-                    header("Location: vendor_profile.php"); // Updated from vendorDashBoard.HTML
+                    header("Location: vendor_profile.php");
                     exit;
-                } elseif ($role === 'admin') {
+                }
+                if ($role === 'admin') {
                     $stmt->close();
                     $conn->close();
-                    header("Location: admin_dash.php"); // Stitched admin routing
+                    header("Location: admin_dash.php");
                     exit;
-                } else {
-                    echo "<script>alert('Login successful for $role.');</script>";
-                    // TODO: Redirect client to Client Dashboard once Zach finishes it
+                }
+                else {
+                	echo "Fatal error";
                 }
             } else {
                 echo "<script>alert('Incorrect password.');</script>";
@@ -76,6 +77,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Login Page</title>
     <style>
         body {
@@ -192,17 +194,8 @@ $conn->close();
 </head>
 <body>
 
-    <div class="header">
-        <div class="title">TITLE OF THE WEBSITE</div>
-        <a href="login.html" class="login-btn">LOGIN</a>
-    </div>
+    <?php include 'global_header.php'; ?>
 
-   <div class="nav">
-        <a href="about.html">ABOUT US</a>
-        <a href="#">EVENT</a>
-        <a href="faq.html">FAQ</a>
-        <a href="#">EVENTS MEETS WORLD</a>
-    </div>
     <div class="container">
         <div class="login-box">
             <div class="login-tabs">
@@ -226,9 +219,7 @@ $conn->close();
         </div>
     </div>
 
-    <div class="footer">
-        COPYRIGHT, ACCOLADES, MAILING LIST, ETC
-    </div>
+<?php include 'global_footer.php'; ?>
 
 <script>
     let selectedRole = 'client';

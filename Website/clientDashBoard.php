@@ -1,14 +1,14 @@
 <?php
-session_start();
-
-function isLoggedIn() {
-    return isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+// Ensure session is started if not already
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 ?>
 <!DOCTYPE html>
 <html>
 
 <title>Client Home</title>
+<link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -16,20 +16,6 @@ body {
     font-family: "Segoe UI", Roboto, sans-serif;
     margin: 0;
     background: #ffffff;
-    text-align: left;
-}
-
-header {
-    background: #E15050;
-    color: #ffffff;
-    padding: 60px 20px;
-    width: 100%;
-}
-
-footer {
-    background: linear-gradient(120deg, #E15050, #E15050);
-    color: #ffffff;
-    padding: 60px 20px;
     text-align: left;
 }
 
@@ -91,54 +77,29 @@ footer {
     margin-right: auto;
 }
 
-.navigationHeader {
-    background: linear-gradient(120deg, #E15050, #E15050);
-    display: flex;
-    width: 100%;
-}
-
-.navChild {
-    flex: 1;
-    border: solid black;
-    text-align: center;
-    height: 38px;
-    width: 25%;
-    colour: white;
-    font-weight: bold;
-}
-
 </style>
 
 <body>
-<header>
-    <h1>Events Meets World</h1>
-    <button><a href="login.php">Log In!</a></button>
-</header>
 
-<div class="navigationHeader">
-    <div class="navChild"><a href="about.html">ABOUT US</a></div>
-<div class="navChild"><a href="#">EVENT</a></div>
-    <div class="navChild"><a href="faq.html">FAQ</a></div>
-    <div class="navChild"><a href="#">EVENTS MEETS WORLD</a></div>
- </div>
+<?php include 'global_header.php'; ?>
 
 <div class="container">
     <div class="contentContainer">
         <div class="featureRow left">
             <div class="itemFeature">
-            	<a href="HTMLPage1.php"><h1>Search Events!</h1></a>   
+            	<a href="eventSearchPage.php"><h1>Search Events!</h1></a>   
             </div>
         </div>
 
         <div class="featureRow right">
             <div class="itemFeature">
-                <a href="#"><h1>Find Blogs!</h1></a> 
+                <a href="blogs.php"><h1>Find Blogs!</h1></a> 
             </div>
         </div>
 
         <div class="featureRow left">
             <div class="itemFeature">
-                <a href="faq.html"><h1>See frequently asked questions!</h1></a>
+                <a href="faq.php"><h1>See frequently asked questions!</h1></a>
             </div>
         </div>
 
@@ -146,7 +107,7 @@ footer {
             <img src="chatIcon.png">
             <div class="itemFeature">
     		<?php if (isLoggedIn()): ?>
-        		<a href="chat.PHP"><h1>Chat with people!</h1></a>
+        		<a href="chat.php"><h1>Chat with people!</h1></a>
     		<?php else: ?>
         		<a href="login.php"><h1>Chat with people!</h1></a>
     		<?php endif; ?>
@@ -155,8 +116,7 @@ footer {
     </div>
 </div>
 
-<footer>
-    <h1>About us, Accolades, etc...</h1>
-</footer>
+<?php include 'global_footer.php'; ?>
+
 </body>
 </html>

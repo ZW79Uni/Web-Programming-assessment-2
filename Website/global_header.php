@@ -4,34 +4,43 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
-<div class="header">
-    <h1>Events Meets Worlds (EMW)</h1>
-    <?php if (isset($vendorData['firstName'])): ?>
-        <h3>Welcome, <?php echo htmlspecialchars($vendorData['firstName']); ?> (<?php echo htmlspecialchars($vendorData['vendorOrginisationName'] ?? 'No Org'); ?>)</h3>
-    <?php elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-        <h3>System Moderation & Verifications</h3>
-    <?php endif; ?>
-</div>
-<div class="nav">
-    <a href="about.html">About Us</a> 
-    <!-- Assuming Search Events is HTMLPage1.php or just placeholder Event.php -->
-    <a href="HTMLPage1.php">Events</a> 
-    <a href="faq.html">FAQ</a> 
-
-    <?php if (isset($_SESSION['role'])): ?>
-        <!-- Role Specific Dashboards -->
-        <?php if ($_SESSION['role'] === 'client'): ?>
-            <a href="#">Client Dashboard</a>
-        <?php elseif ($_SESSION['role'] === 'vendor'): ?>
-            <a href="vendor_profile.php">Vendor Dashboard</a>
-        <?php elseif ($_SESSION['role'] === 'admin'): ?>
-            <a href="admin_dash.php">Admin Dashboard</a>
+<header class="main-header">
+    <div class="header-logo">
+        <a href="index.php" style="color: inherit; text-decoration: none;">
+            <h1>EVENTS<br>MEETS<br>WORLD</h1>
+        </a>
+    </div>
+    
+    <div class="header-right">
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'vendor'): ?>
+            <span class="welcome-text">Vendor Portal</span>
+        <?php elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+            <span class="welcome-text">System Moderation</span>
         <?php endif; ?>
-        
-        <!-- Shared Logged-in Links -->
-        <a href="chatPicker.HTML">Chat</a>
-        <a href="login.php">Logout</a> <!-- In a real app this would go to a logout.php to destroy session -->
+
+        <?php if (!isset($_SESSION['role'])): ?>
+            <a href="login.php"><button class="header-login-btn">Log In</button></a>
+        <?php else: ?>
+            <a href="login.php?logout=1"><button class="header-login-btn">Log Out</button></a>
+        <?php endif; ?>
+    </div>
+</header>
+<div class="navigationHeader">
+    <div class="navChild"><a href="about.php">About Us</a></div>
+    <div class="navChild"><a href="eventSearchPage.php">Events</a></div>
+    <div class="navChild"><a href="faq.php">FAQs</a></div>
+    <div class="navChild"><a href="https://www.eventsmeetsworld.co.uk/hire" target="_blank">Equipment Hire</a></div>
+    
+    <?php if (isset($_SESSION['role'])): ?>
+        <?php if ($_SESSION['role'] === 'client'): ?>
+            <div class="navChild"><a href="chat.php">Chat</a></div>
+            <div class="navChild"><a href="clientDashBoard.php">Dashboard</a></div>
+        <?php elseif ($_SESSION['role'] === 'vendor'): ?>
+            <div class="navChild"><a href="vendor_profile.php">Dashboard</a></div>
+        <?php elseif ($_SESSION['role'] === 'admin'): ?>
+            <div class="navChild"><a href="admin_dash.php">Admin</a></div>
+        <?php endif; ?>
     <?php else: ?>
-        <a href="login.php">Log In</a>
+        <div class="navChild"><a href="blogs.php">Blogs</a></div>
     <?php endif; ?>
 </div>

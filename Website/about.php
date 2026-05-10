@@ -4,52 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid black;
-        }
-
-        .title {
-            font-size: 24px;
-        }
-
-        .login-btn {
-            padding: 5px 10px;
-            border: 1px solid black;
-            text-decoration: none;
-            color: black;
-            display: inline-block;
-        }
-
-        /* Navigation */
-        .nav {
-            display: flex;
-            border-bottom: 1px solid black;
-        }
-
-        .nav a {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            text-decoration: none;
-            border-right: 1px solid black;
-            color: black;
-        }
-
-        .nav a:last-child {
-            border-right: none;
-        }
-
         /* Main Content */
         .container {
             padding: 40px;
@@ -90,18 +46,7 @@
 <body>
 
     <!-- Header -->
-    <div class="header">
-        <div class="title">Events Meets World</div>
-        <a href="login.html" class="login-btn">LOGIN</a>
-    </div>
-
-    <!-- Navigation -->
-    <div class="nav">
-        <a href="about.html">ABOUT US</a>
-        <a href="#">EVENT</a>
-        <a href="faq.html">FAQ</a>
-        <a href="#">EVENTS MEETS WORLD</a>
-    </div>
+    <?php include 'global_header.php'; ?>
 
     <!-- Main Content -->
     <div class="container">
@@ -125,9 +70,7 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer">
-        COPYRIGHT, ACCOLADES, MAILING LIST, ETC
-    </div>
+    <?php include 'global_footer.php'; ?>
 
 </body>
 </html>
