@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
+$userID = intval($_SESSION['user_id']);
+$role = $_SESSION['role'];
+?>
 <!DOCTYPE html>
 <html>
 
@@ -152,29 +162,52 @@ footer {
         $conn = new mysqli($servername, $username, $password, $dbname);
         if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 
-        $clientID = 1;
-
-        $sql = "
-        SELECT chat.chatID, chat.vendorID, vendor.firstName, vendor.lastName, vendor.vendorOrginisationName
-        FROM chat
-        JOIN vendor ON chat.vendorID = vendor.vendorID
-        WHERE chat.clientID = $clientID
-        ";
+        if ($role === 'client') {
+            $sql = "
+            SELECT chat.chatID, chat.vendorID, vendor.firstName, vendor.lastName, vendor.vendorOrginisationName
+            FROM chat
+            JOIN vendor ON chat.vendorID = vendor.vendorID
+            WHERE chat.clientID = $userID
+            ";
+        } elseif ($role === 'vendor') {
+            $sql = "
+            SELECT chat.chatID, chat.clientID, client.firstName, client.lastName
+            FROM chat
+            JOIN client ON chat.clientID = client.clientID
+            WHERE chat.vendorID = $userID
+            ";
+        } else {
+            $sql = "
+            SELECT chat.chatID, chat.clientID, chat.vendorID, client.firstName AS clientFirst, client.lastName AS clientLast,
+                   vendor.firstName AS vendorFirst, vendor.lastName AS vendorLast
+            FROM chat
+            JOIN client ON chat.clientID = client.clientID
+            JOIN vendor ON chat.vendorID = vendor.vendorID
+            ";
+        }
 
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 $chatID = $row['chatID'];
-                $vendorName = htmlspecialchars($row['firstName'] . ' ' . $row['lastName']);
-                $vendorOrg = htmlspecialchars($row['vendorOrginisationName']);
+                if ($role === 'client') {
+                    $name = htmlspecialchars($row['firstName'] . ' ' . $row['lastName']);
+                    $org = htmlspecialchars($row['vendorOrginisationName']);
+                    $display = "Chat with: $name <br>from: $org";
+                } elseif ($role === 'vendor') {
+                    $name = htmlspecialchars($row['firstName'] . ' ' . $row['lastName']);
+                    $display = "Chat with: $name";
+                } else {
+                    $clientName = htmlspecialchars($row['clientFirst'] . ' ' . $row['clientLast']);
+                    $vendorName = htmlspecialchars($row['vendorFirst'] . ' ' . $row['vendorLast']);
+                    $display = "Chat: $clientName ↔ $vendorName";
+                }
                 echo "
                 <div class='chatSelected' data-chatid='$chatID'>
                     <div style='display: flex; align-items: center;'>
                         <img src='blank pfp.png' width='40' height='40'>
-                        <div>
-                            Chat with: $vendorName <br>from: $vendorOrg
-                        </div>
+                        <div>$display</div>
                     </div>
                 </div>";
             }

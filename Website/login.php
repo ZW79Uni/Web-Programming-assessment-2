@@ -37,6 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($passwordInput === $dbPassword) {
                 $_SESSION[$idField] = $id; // Set specific ID (vendorID, adminID, clientID) to map to our new pages
                 $_SESSION['role'] = $role;
+                $_SESSION['loggedin'] = true;
+                if ($role === 'client') {
+                    $stmt->close();
+                    $conn->close();
+                    header("Location: clientDashBoard.php");
+                    exit;
+                }
                 if ($role === 'vendor') {
                     $stmt->close();
                     $conn->close();
