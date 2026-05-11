@@ -202,10 +202,40 @@ footer {
             echo "No results found";
         }
 
-        $conn->close();
+	$conn->close();
         ?>
+<?php if ($role === 'client'): ?>
+    <div class="vendor-selector" style="padding: 10px; border-bottom: 2px solid black;">
+        <label for="vendors">Start a new chat:</label>
+        <select name="vendors" id="vendors">
+            <?php
+            $conn = new mysqli("localhost", "h6zp02h_WebAccess", "SparrowHawk26!", "h6zp02h_EMW_Database");
+            if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+            
+            $sql = "SELECT v.vendorID, v.vendorOrginisationName 
+                    FROM vendor v
+                    LEFT JOIN chat c ON v.vendorID = c.vendorID AND c.clientID = " . intval($_SESSION['user_id']) . "
+                    WHERE c.chatID IS NULL";
+            
+            $result = $conn->query($sql);
+            
+            if ($result && $result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+   			$id = $row['vendorID'];
+    			$orgName = htmlspecialchars($row['vendorOrginisationName']);
+    
+    		echo "<option value='$id'>$orgName</option>";
+		}
+            } else {
+                echo "<option value=''>No new vendors available</option>";
+            }
+            $conn->close();
+            ?>
+        </select>
+        <button id="createNewChatBtn">Start Chat</button>
     </div>
-
+<?php endif; ?>
+    </div> 
     <div class="chat">
         <div id="messagesArea">
             <h2>Select a chat and get planning!</h2>
@@ -224,6 +254,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatBox = document.querySelector('#messagesArea');
     const sendBtn = document.getElementById('sendBtn');
     const messageInput = document.getElementById('messageInput');
+    const createBtn = document.getElementById('createNewChatBtn');
+    const vendorDropdown = document.getElementById('vendors');
 
     let currentChatID = null;
 
@@ -235,6 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.text())
                 .then(data => {
                     chatBox.innerHTML = data;
+                    chatBox.scrollTop = chatBox.scrollHeight;
                 })
                 .catch(err => console.error(err));
         });
@@ -242,14 +275,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     sendBtn.addEventListener('click', function() {
         const message = messageInput.value.trim();
-
-        if (!message || !currentChatID) return;
+        if (!message || !currentChatID) {
+            alert("Select a chat first and type a message!");
+            return;
+        }
 
         fetch('send_message.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `chatID=${currentChatID}&message=${encodeURIComponent(message)}`
         })
         .then(response => response.text())
@@ -264,7 +297,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(err => console.error(err));
     });
-});
 </script>
 
 <?php include 'global_footer.php'; ?>

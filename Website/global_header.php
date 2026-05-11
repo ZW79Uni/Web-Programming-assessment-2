@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <header class="main-header">
     <div class="header-logo">
         <a href="index.php" style="color: inherit; text-decoration: none;">
-            <h1>EVENTS<br>MEETS<br>WORLD</h1>
+            <img src="EMW Logo 2.png"width="200" height="100">
         </a>
     </div>
     

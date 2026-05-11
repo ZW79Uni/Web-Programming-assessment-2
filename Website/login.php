@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION[$idField] = $id;
                 $_SESSION['role'] = $role;
                 $_SESSION['loggedin'] = true;
+                $_SESSION['user_id'] = $id;
                 if ($role === 'client') {
                     $stmt->close();
                     $conn->close();
@@ -233,7 +234,9 @@ $conn->close();
                 <button type="submit" class="sign-in-btn">Sign in</button>
                 <div class="small-text">
                     Can’t remember your password? 
-                    <a href="forgot-password.html">Click here</a>
+                    <a href="forgot-password.php">Click here</a>
+                    <br>Don't have an acount? 
+                    <a href="signup.php">Click here</a>
                 </div>
             </form>
         </div>

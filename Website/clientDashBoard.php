@@ -106,11 +106,8 @@ body {
         <div class="featureRow">
             <img src="chatIcon.png">
             <div class="itemFeature">
-    		<?php if (isLoggedIn()): ?>
-        		<a href="chat.php"><h1>Chat with people!</h1></a>
-    		<?php else: ?>
-        		<a href="login.php"><h1>Chat with people!</h1></a>
-    		<?php endif; ?>
+                 <a href="chat.php"><h1>Chat with people!</h1></a>
+            </div>
 	</div>
         </div>
     </div>
